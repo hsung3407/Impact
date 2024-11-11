@@ -1,20 +1,21 @@
 using System;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
+using Utility;
 
 namespace UI
 {
-    public class PlayerHUD : MonoBehaviour
+    public class PlayerHUD : Singleton<PlayerHUD>
     {
-        [SerializeField] private Slider hpBar;
+        [SerializeField] private Slider healthBar;
+        [SerializeField] private Slider staminaBar;
 
-        private void Awake()
-        {
-            hpBar.minValue = 0;
-            hpBar.maxValue = 1;
-        }
 
-        private void SetHP(float value) => hpBar.value = value;
-        private void SetHP(float value, float maxValue) => hpBar.value = value / maxValue;
+        public void SetHealth(float value, float maxValue) =>
+            healthBar.value = value / maxValue * healthBar.maxValue + healthBar.minValue;
+
+        public void SetStamina(float value, float maxValue) =>
+            staminaBar.value = value / maxValue * staminaBar.maxValue + staminaBar.minValue;
     }
 }
