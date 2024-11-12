@@ -3,7 +3,7 @@ using UnityEngine.Serialization;
 
 namespace Player.Mover
 {
-    public abstract class BaseMover : MonoBehaviour
+    public abstract class MoverBase : MonoBehaviour
     {
         [SerializeField] protected float speed;
         /// <returns>Player Look Direction </returns> <returns> Move Ratio</returns>
