@@ -40,6 +40,10 @@ namespace Player
             if (Input.GetKeyDown(KeyCode.Q))
             {
                 _currentBaseMover = _currentBaseMover == _movers[MoveType.Combat] ? _movers[MoveType.Default] : _movers[MoveType.Combat];
+            }            
+            if (Input.GetKeyDown(KeyCode.U))
+            {
+                _playerStats.UseStamina(10);
             }
         }
     }
