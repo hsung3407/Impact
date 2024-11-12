@@ -14,9 +14,9 @@ namespace Player
         private float _stamina;
 
         [SerializeField] private float defaultStaminaRecovery = 5f;
-        private float recoveryTime = 1;
-        private float recoveryTimer;
-    
+        [SerializeField] private float recoveryTime = 1;
+        private float _recoveryTimer;
+
         private void Awake()
         {
             _health = maxHealth;
@@ -33,12 +33,13 @@ namespace Player
             while (_isAlive)
             {
                 var delta = Time.deltaTime;
-                recoveryTimer += delta;
-                if (recoveryTimer > recoveryTime)
+                _recoveryTimer += delta;
+                if (_recoveryTimer > recoveryTime)
                 {
                     _stamina = Mathf.Min(_stamina + defaultStaminaRecovery * delta, maxStamina);
                     PlayerHUD.Instance.SetStamina(_stamina, maxStamina);
                 }
+
                 yield return null;
                 if (_stamina >= maxStamina) yield return new WaitUntil(() => _stamina < maxStamina);
             }
