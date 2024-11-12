@@ -7,12 +7,14 @@ namespace Player
 {
     public class PlayerController : MonoBehaviour
     {
+        private Animator _animator;
         private PlayerStats _playerStats;
 
         private readonly PlayerInput _playerInput = new PlayerInput();
-        
-        private IMover _currentMover;
-        private readonly Dictionary<MoveType, IMover> _movers = new Dictionary<MoveType, IMover>();
+
+        private BaseMover _currentBaseMover;
+        private readonly Dictionary<MoveType, BaseMover> _movers = new Dictionary<MoveType, BaseMover>();
+
         private enum MoveType
         {
             Default,
@@ -21,15 +23,24 @@ namespace Player
 
         private void Awake()
         {
+            _animator = transform.GetChild(transform.childCount-1).GetComponent<Animator>();
             _playerStats = GetComponent<PlayerStats>();
-            
-            _movers.Add(MoveType.Default, _currentMover = new DefaultMover());
-            _movers.Add(MoveType.Combat, new CombatMover());
+
+            var movers = transform.GetChild(0).GetComponents<BaseMover>();
+            _movers.Add(MoveType.Default, _currentBaseMover = movers[0]);
+            _movers.Add(MoveType.Combat, movers[1]);
         }
 
         private void Update()
         {
-            _currentMover.Move(_playerInput.GetDirection(), transform);
+            _playerInput.UpdateInput();
+            _currentBaseMover?.Move(_playerInput.Direction, transform, _animator);
+            
+            //TODO: Test
+            if (Input.GetKeyDown(KeyCode.Q))
+            {
+                _currentBaseMover = _currentBaseMover == _movers[MoveType.Combat] ? _movers[MoveType.Default] : _movers[MoveType.Combat];
+            }
         }
     }
 }
