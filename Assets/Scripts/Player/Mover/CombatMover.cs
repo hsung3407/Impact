@@ -2,11 +2,13 @@ using UnityEngine;
 
 namespace Player.Mover
 {
-    public class CombatMover : IMover
+    public class CombatMover : BaseMover
     {
-        public (Vector3, float) Move(Vector3 dir, Transform tr)
+        public override void Move(Vector3 dir, Transform tr, Animator anim)
         {
-            throw new System.NotImplementedException();
+            anim.SetFloat("VMove", dir.z);
+            anim.SetFloat("HMove", dir.x);
+            tr.position += dir * (speed * Time.deltaTime);
         }
     }
 }
