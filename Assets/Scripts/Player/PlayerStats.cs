@@ -42,6 +42,8 @@ namespace Player
 
                 yield return null;
                 if (_stamina >= maxStamina) yield return new WaitUntil(() => _stamina < maxStamina);
+                else continue;
+                _recoveryTimer = 0;
             }
         }
 
