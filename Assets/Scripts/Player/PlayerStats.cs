@@ -17,14 +17,14 @@ namespace Player
         [SerializeField] private float recoveryTime = 1;
         private float _recoveryTimer;
 
-        private void Awake()
-        {
-            _health = maxHealth;
-            _stamina = maxStamina;
-        }
 
         private void Start()
         {
+            _health = maxHealth;
+            _stamina = maxStamina;
+            PlayerHUD.Instance.SetHealth(1, 1);
+            PlayerHUD.Instance.SetStamina(1, 1);
+            _recoveryTimer = recoveryTime;
             StartCoroutine(NaturalRecoverStamina());
         }
 
@@ -43,7 +43,6 @@ namespace Player
                 yield return null;
                 if (_stamina >= maxStamina) yield return new WaitUntil(() => _stamina < maxStamina);
                 else continue;
-                _recoveryTimer = 0;
             }
         }
 
@@ -67,7 +66,8 @@ namespace Player
         /// <returns>Use Success</returns>
         public bool UseStamina(float value)
         {
-            if (_stamina > value) return false;
+            if (_stamina < value) return false;
+            _recoveryTimer = 0;
             _stamina -= value;
             PlayerHUD.Instance.SetStamina(_stamina, maxStamina);
             return true;
